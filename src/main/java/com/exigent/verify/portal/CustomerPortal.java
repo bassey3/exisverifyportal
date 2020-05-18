@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class CustomerPortal{
@@ -18,10 +19,21 @@ public class CustomerPortal{
     @GetMapping("/customer/")
     public String customerDash(@AuthenticationPrincipal OidcUser user, HttpSession session) {
         if(user != null){
-            return "Hello, " + user.getFullName();
+            session.setAttribute("name", user.getFullName());
+            return "customer/dashboard";
         }
         HttpServletRequest request;
         session.setAttribute("name", "lawrence");
         return "customer/dashboard";
+    }
+    @RequestMapping("/")
+    public String home(@AuthenticationPrincipal OidcUser user, HttpSession session){
+        return customerDash(user, session);
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "/login";
     }
 }
