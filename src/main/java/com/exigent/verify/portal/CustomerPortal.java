@@ -2,6 +2,7 @@ package com.exigent.verify.portal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@Slf4j
 public class CustomerPortal{
 
     @GetMapping("/admin/dashboard")
@@ -19,6 +21,7 @@ public class CustomerPortal{
     @GetMapping("/customer/")
     public String customerDash(@AuthenticationPrincipal OidcUser user, HttpSession session) {
         if(user != null){
+
             session.setAttribute("name", user.getFullName());
             return "customer/dashboard";
         }
@@ -36,4 +39,8 @@ public class CustomerPortal{
         session.invalidate();
         return "/login";
     }
+//    @RequestMapping("/authorization-code/callback")
+//    public void authCallback(@AuthenticationPrincipal OidcUser user, HttpSession session){
+//        log.warn("callback");
+//    }
 }
