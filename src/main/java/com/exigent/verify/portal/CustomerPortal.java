@@ -23,6 +23,7 @@ public class CustomerPortal{
         if(user != null){
 
             session.setAttribute("name", user.getFullName());
+            session.setAttribute("pic", user.getPicture());
             return "customer/dashboard";
         }
         HttpServletRequest request;
@@ -32,6 +33,15 @@ public class CustomerPortal{
     @RequestMapping("/")
     public String home(@AuthenticationPrincipal OidcUser user, HttpSession session){
         return customerDash(user, session);
+    }
+
+    @RequestMapping("/dashboard")
+    public String mainDashboard(@AuthenticationPrincipal OidcUser user, HttpSession session){
+        return customerDash(user, session);
+    }
+    @RequestMapping("/blank")
+    public String blank(@AuthenticationPrincipal OidcUser user, HttpSession session){
+        return "customer/blank";
     }
 
     @RequestMapping("/logout")
